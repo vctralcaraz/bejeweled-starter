@@ -61,89 +61,56 @@ class Bejeweled {
     let checkEmoji;
     let popArray = [];
     let currentLocation;
-    Array.prototype.clearAndPush = function(el) {
-      let temp = [el];
-      return temp;
-    }
 
-    grid.forEach((row, i) => {
-      count = 0;
+    grid.forEach(function(row, i) {
       checkEmoji = '';
+      count = 0;
 
-      row.forEach((el, j) => {
+      row.forEach(function(el, j) {
         currentLocation = {row: i, col: j};
-
+        
         if(checkEmoji === '') {
           checkEmoji = el;
-          popArray.push(currentLocation);
-          count++;
-          console.log(checkEmoji);
-          console.log(popArray);
-          console.log(count);
-        } else if(checkEmoji === el) {
-
-          popArray.push(currentLocation);
-          count++;
-          console.log(checkEmoji);
-          console.log(popArray);
-          console.log(count);
-        } else if(checkEmoji !== el) {
-          popArray.length = 0;
-          popArray.push(currentLocation);
-          checkEmoji = el;
-          count = 1;
         }
-      })
-    })
 
-    // for(let i = 0; i < grid.length; i++) {
-    //   let row = grid[i];
-    //   count = 0;
-    //   checkEmoji = '';
-    //   console.log(row)
+        if(checkEmoji === el) {
+          count++;
+          popArray.push(currentLocation);
+        } else {
 
-    //   for(let j = 0; j < row.length; j++) {
-    //     let el = row[j];
+          if(count >= 3) {
+            this._popEmojis(popArray);
+          }
 
-    //     if(checkEmoji === '') {
-    //       checkEmoji = el;
-    //       popArray.push({row: i, col: j});
-    //       count++;
-    //       console.log(popArray);
-    //     } else if(checkEmoji === el) {
+          count = 1;
+          checkEmoji = el;
+          popArray = [];
+          popArray.push(currentLocation);
+        }
 
-    //       count++;
-    //       popArray.push({row: i, col: j});
-    //       console.log(popArray);
-    //     } else {
-
-    //       if(count >= 3) {
-    //         this._popEmojis(popArray);
-    //         console.log(popArray);
-    //       }
-
-    //       checkEmoji = el;
-    //       popArray.clearAndPush({row: i, col: j});
-    //       count = 1;
-    //       console.log(popArray);
-    //     }
-
-
-    //   }
-    // }
+        // console.log(count);
+        // console.log(popArray);
+        // console.log(checkEmoji);
+      });
+    });
 
     Screen.grid = this.grid;
     Screen.render();
   }
 
   _popEmojis(arr) {
+    console.log(arr);
+    console.log(this.grid);
     for(let i = 0; i < arr.length; i++) {
+      console.log(arr[i].row, arr[i].col);
       this.grid[arr[i].row][arr[i].col] = ' ';
     }
 
     Screen.grid = this.grid;
     Screen.render();
   }
+
+  _popEmojis = this._popEmojis.bind(this);
 
   initializeBoard() {
 
