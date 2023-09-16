@@ -26,7 +26,22 @@ describe ('Cursor', function () {
     expect([cursor.row, cursor.col]).to.deep.equal([2, 0]);
 
     cursor.down();
-    expect([cursor.row, cursor.col]).to.deep.equal([2, 0]);
+    expect([cursor.row, cursor.col]).to.deep.equal([3, 0]);
+
+    cursor.down();
+    expect([cursor.row, cursor.col]).to.deep.equal([4, 0]);
+
+    cursor.down();
+    expect([cursor.row, cursor.col]).to.deep.equal([5, 0]);
+
+    cursor.down();
+    expect([cursor.row, cursor.col]).to.deep.equal([6, 0]);
+
+    cursor.down();
+    expect([cursor.row, cursor.col]).to.deep.equal([7, 0]);
+
+    cursor.down();
+    expect([cursor.row, cursor.col]).to.deep.equal([7, 0]);
   });
 
   it('correctly processes up inputs', function () {
@@ -50,7 +65,22 @@ describe ('Cursor', function () {
     expect([cursor.row, cursor.col]).to.deep.equal([0, 2]);
 
     cursor.right();
-    expect([cursor.row, cursor.col]).to.deep.equal([0, 2]);
+    expect([cursor.row, cursor.col]).to.deep.equal([0, 3]);
+
+    cursor.right();
+    expect([cursor.row, cursor.col]).to.deep.equal([0, 4]);
+
+    cursor.right();
+    expect([cursor.row, cursor.col]).to.deep.equal([0, 5]);
+
+    cursor.right();
+    expect([cursor.row, cursor.col]).to.deep.equal([0, 6]);
+
+    cursor.right();
+    expect([cursor.row, cursor.col]).to.deep.equal([0, 7]);
+
+    cursor.right();
+    expect([cursor.row, cursor.col]).to.deep.equal([0, 7]);
   });
 
   it('processes left inputs', function () {
@@ -65,7 +95,4 @@ describe ('Cursor', function () {
     expect([cursor.row, cursor.col]).to.deep.equal([0, 0]);
   });
 
-
-
 });
-
