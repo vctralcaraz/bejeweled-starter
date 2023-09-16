@@ -106,6 +106,11 @@ class Cursor {
     this.setSelectedBackgroundColor();
     Screen.render();
   }
+
+  clearSelected() {
+    this.resetSelectedBackgroundColor(this.selected.row, this.selected.col);
+    this.selected = {};
+  }
 }
 
 

@@ -5,28 +5,18 @@ class Bejeweled {
 
   constructor() {
 
-    // this.playerTurn = "O";
     this.numRows = 8;
     this.numCols = 8;
     this.icons = ['🍇', '🍉', '🍊', '🍋', '🍍', '🍒', '🍓', '🥝', '🥥'];
 
     // Initialize this
-    this.grid = [
-      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
-    ];
+    this.grid = [];
 
     this.initializeBoard();
 
-    this.cursor = new Cursor(8, 8);
+    this.cursor = new Cursor(this.numRows, this.numCols);
 
-    Screen.initialize(8, 8);
+    Screen.initialize(this.numRows, this.numCols);
     Screen.grid = this.grid;
     Screen.setGridlines(false);
 
@@ -46,23 +36,122 @@ class Bejeweled {
       this.cursor.left();
     });
     Screen.addCommand('return', 'select fruit', () => {
-      this.cursor.select();
+      if(Object.keys(this.cursor.selected).length > 0) {
+        this._swap({row: this.cursor.row, col: this.cursor.col}, this.cursor.selected);
+        this.checkForMatches(Screen.grid);
+      } else {
+        this.cursor.select();
+      }
     });
-
 
     Screen.render();
   }
 
-  static checkForMatches(grid) {
+  checkForMatches(grid) {
 
     // Fill this in
+    this._horizontalCheck(grid);
 
   }
 
+  _horizontalCheck(grid) {
+    // console.log('inside horizontal check')
+
+    let count;
+    let checkEmoji;
+    let popArray = [];
+    let currentLocation;
+    Array.prototype.clearAndPush = function(el) {
+      let temp = [el];
+      return temp;
+    }
+
+    grid.forEach((row, i) => {
+      count = 0;
+      checkEmoji = '';
+
+      row.forEach((el, j) => {
+        currentLocation = {row: i, col: j};
+
+        if(checkEmoji === '') {
+          checkEmoji = el;
+          popArray.push(currentLocation);
+          count++;
+          console.log(checkEmoji);
+          console.log(popArray);
+          console.log(count);
+        } else if(checkEmoji === el) {
+
+          popArray.push(currentLocation);
+          count++;
+          console.log(checkEmoji);
+          console.log(popArray);
+          console.log(count);
+        } else if(checkEmoji !== el) {
+          popArray.length = 0;
+          popArray.push(currentLocation);
+          checkEmoji = el;
+          count = 1;
+        }
+      })
+    })
+
+    // for(let i = 0; i < grid.length; i++) {
+    //   let row = grid[i];
+    //   count = 0;
+    //   checkEmoji = '';
+    //   console.log(row)
+
+    //   for(let j = 0; j < row.length; j++) {
+    //     let el = row[j];
+
+    //     if(checkEmoji === '') {
+    //       checkEmoji = el;
+    //       popArray.push({row: i, col: j});
+    //       count++;
+    //       console.log(popArray);
+    //     } else if(checkEmoji === el) {
+
+    //       count++;
+    //       popArray.push({row: i, col: j});
+    //       console.log(popArray);
+    //     } else {
+
+    //       if(count >= 3) {
+    //         this._popEmojis(popArray);
+    //         console.log(popArray);
+    //       }
+
+    //       checkEmoji = el;
+    //       popArray.clearAndPush({row: i, col: j});
+    //       count = 1;
+    //       console.log(popArray);
+    //     }
+
+
+    //   }
+    // }
+
+    Screen.grid = this.grid;
+    Screen.render();
+  }
+
+  _popEmojis(arr) {
+    for(let i = 0; i < arr.length; i++) {
+      this.grid[arr[i].row][arr[i].col] = ' ';
+    }
+
+    Screen.grid = this.grid;
+    Screen.render();
+  }
+
   initializeBoard() {
+
     let lastR = null;
 
     for(let i = 0; i < this.numRows; i++) {
+      this.grid.push([]);
+
       for(let j = 0; j < this.numCols; j++) {
         let r = this._getRandomIndex(lastR)
         lastR = r;
@@ -82,6 +171,19 @@ class Bejeweled {
     return index;
   }
 
+  _swap(newSelect, oldSelect) {
+
+    let oldEmoji = Screen.grid[oldSelect.row][oldSelect.col];
+    let newEmoji = Screen.grid[newSelect.row][newSelect.col];
+
+    this.grid[newSelect.row][newSelect.col] = oldEmoji;
+    this.grid[oldSelect.row][oldSelect.col] = newEmoji;
+
+    Screen.grid = this.grid;
+    this.cursor.clearSelected();
+
+    Screen.render();
+  }
 
 }
 
